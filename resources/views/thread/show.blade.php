@@ -25,5 +25,24 @@
             @endforeach
         </div>
     </div>
+    @if (auth()->check())
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <form method="POST" action="{{ action('ReplyController@store', ['id' => $thread->id]) }}">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <textarea name="body" id="body" 
+                              class="form-control" 
+                              placeholder="Poster un commentaire?" 
+                              rows="5"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-default">Poster</button>
+            </form>
+        </div>
+    </div>
+    @else
+    <p class="text-center">Veuillez vous <a href="{{route('login')}}">connecter</a> pour participer à la conversation.</p>
+    @endif
 </div>
 @endsection
