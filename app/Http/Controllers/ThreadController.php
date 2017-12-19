@@ -28,7 +28,7 @@ class ThreadController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('thread.create');
     }
 
     /**
@@ -43,8 +43,8 @@ class ThreadController extends Controller {
                     'title' => request('title'),
                     'body' => request('body'),
         ]);
-
-        return redirect($thread->path);
+        dd($thread->path());
+        return redirect($thread->path());
     }
 
     /**
