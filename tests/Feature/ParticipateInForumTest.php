@@ -13,12 +13,9 @@ class ParticipateInForumTest extends TestCase {
 
     public function unauth_user_cant_reply() {
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        
-        $thread = factory('App\Thread')->create();
-        
-        $reply = factory('App\Reply')->create();
 
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
+        $this->post(route('threads.store', ['slug' => 'channelTest', 'id' => 2]), [])
+                ->assertRedirect('/login');
     }
 
     /**
@@ -28,13 +25,33 @@ class ParticipateInForumTest extends TestCase {
         $this->be($user = factory('App\User')->create());
 
         $thread = factory('App\Thread')->create();
+
         //cree mais ne sauvegarde pas la reponse
         $reply = factory('App\Reply')->make();
 
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
+        $this->post(route('threads.store', [$thread->channel->slug,$thread->id]), $reply->toArray());
 
-        $this->get('/threads/' . $thread->id)
+        $this->get(route('threads.show', ['slug' => $thread->channel->slug, 'id' => $thread->id]))
                 ->assertSee($reply->body);
+    }
+
+    /**
+     * @test
+     */
+    public function reply_requires_a_body() {
+        $this->expectException('Illuminate\Validation\ValidationException');
+
+        $this->be($user = factory('App\User')->create());
+
+        $thread = factory('App\Thread')->create();
+
+        //cree mais ne sauvegarde pas la reponse
+        $reply = factory('App\Reply')->make(['body' => null]);
+
+        $this->post(
+                route('threads.store', ['slug' => $thread->channel->slug,
+            'id' => $thread->id]), $reply->toArray()
+        )->assertSessionHasErrors('body');
     }
 
 }

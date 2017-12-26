@@ -8,18 +8,39 @@
                 <div class="panel-heading">Créer un sujet</div>
 
                 <div class="panel-body">
-                    <form method="POST" action="{{action('ThreadController@store')}}">
+                    <form method="POST" action="{{route('threads.store')}}">
                         {{csrf_field()}}
                         <div class="form-group">
+                            <label for="channel_id">Choisir une section</label>
+                            <select id="channel_id" name="channel_id" class="form-control" required>
+                                <option value="">Choisir ...</option>
+                                @foreach(App\Channel::all() as $channel)
+                                <option value="{{$channel->id}}" {{ old('channel_id') == $channel->id ? 'selected' : '' }}>{{$channel->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Titre">
+                            <input required type="text" class="form-control" id="title" name="title" placeholder="Titre" value="{{ old('title') }}">
                         </div>
                         <div class="form-group">
                             <label for="body">Contenu</label>
-                            <textarea name="body" id="body" class="form-control" rows="8"></textarea>
+                            <textarea required name="body" id="body" class="form-control" rows="8">{{ old('body') }}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Publier</button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Publier</button>
+                        </div>
+
+                        @if(count($errors))
+                        <ul class="alert alert-danger">
+                            @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                            @endforeach
+                        </ul>
+                        @endif
+
                     </form>
+
                 </div>
             </div>
         </div>

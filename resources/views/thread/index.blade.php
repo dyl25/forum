@@ -12,7 +12,7 @@
                     <article>
                         <header>
                             <h4>
-                                <a href="{{ action('ThreadController@show', ['id' => $thread->id]) }}">{{ $thread->title }}</a>
+                                <a href="{{ route('threads.show', ['slug' => $thread->channel->slug ,'id' => $thread->id]) }}">{{ $thread->title }}</a>
                             </h4>
                         </header>
                         <div class="body">{{ $thread->body }}</div>

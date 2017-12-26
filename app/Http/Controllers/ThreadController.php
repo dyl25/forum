@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use App\Channel;
 use Illuminate\Http\Request;
 
 class ThreadController extends Controller {
 
     public function __construct() {
-        $this->middleware('auth')->only('store');
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
     /**
@@ -16,8 +17,14 @@ class ThreadController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $threads = Thread::latest()->get();
+    public function index(Channel $channel) {
+        if ($channel->exists) {
+            $threads = $channel->threads()->latest()->get();
+        } else {
+            $threads = Thread::latest()->get();
+        }
+        
+        //$channels = Channel::all();
 
         return view('thread.index', compact('threads'));
     }
@@ -38,22 +45,35 @@ class ThreadController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
+
         $thread = Thread::create([
                     'user_id' => auth()->id(),
+                    'channel_id' => request('channel_id'),
                     'title' => request('title'),
-                    'body' => request('body'),
+                    'body' => request('body')
         ]);
-        dd($thread->path());
-        return redirect($thread->path());
+
+        //return redirect('/threads/'. $thread->channel->slug.'/' .$thread->id);
+        return redirect(route('threads.show', [
+            'slug' => $thread->channel->slug,
+            'id' => $thread->id
+        ]));
     }
 
     /**
      * Display the specified resource.
      *
+     * @param type $channel Section du sujet
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread) {
+    public function show($channel, Thread $thread) {
         return view('thread.show', compact('thread'));
     }
 
