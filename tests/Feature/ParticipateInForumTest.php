@@ -29,9 +29,9 @@ class ParticipateInForumTest extends TestCase {
         //cree mais ne sauvegarde pas la reponse
         $reply = factory('App\Reply')->make();
 
-        $this->post(route('threads.store', [$thread->channel->slug,$thread->id]), $reply->toArray());
+        $this->post(route('replies.store', [$thread->channel->slug, $thread->id]), $reply->toArray());
 
-        $this->get(route('threads.show', ['slug' => $thread->channel->slug, 'id' => $thread->id]))
+        $this->get(route('threads.show', [$thread->channel->slug, $thread->id]))
                 ->assertSee($reply->body);
     }
 
@@ -49,8 +49,8 @@ class ParticipateInForumTest extends TestCase {
         $reply = factory('App\Reply')->make(['body' => null]);
 
         $this->post(
-                route('threads.store', ['slug' => $thread->channel->slug,
-            'id' => $thread->id]), $reply->toArray()
+                route('replies.store', [$thread->channel->slug,
+            $thread->id]), $reply->toArray()
         )->assertSessionHasErrors('body');
     }
 

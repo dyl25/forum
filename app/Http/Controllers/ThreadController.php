@@ -19,12 +19,17 @@ class ThreadController extends Controller {
      */
     public function index(Channel $channel) {
         if ($channel->exists) {
-            $threads = $channel->threads()->latest()->get();
+            $threads = $channel->threads()->latest();
         } else {
-            $threads = Thread::latest()->get();
+            $threads = Thread::latest();
         }
         
-        //$channels = Channel::all();
+        if($username = request('by')) {
+            $user = \App\User::where('name', $username)->firstOrFail();
+            $threads->where('user_id', $user->id);
+        }
+        
+        $threads = $threads->get();
 
         return view('thread.index', compact('threads'));
     }

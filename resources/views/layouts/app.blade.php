@@ -39,14 +39,24 @@
                             <li><a href="{{ route('threads.index') }}">Tout les sujets</a></li>
 
                             <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Afficher <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ route('threads.index') }}">Tout les sujets</a></li>
+                                    @if(auth()->check())
+                                    <li><a href="{{route('threads.index',  '?by='.auth()->user()->name)}}">Mes sujets</a></li>
+                                    @endif
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sections <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    @foreach(App\Channel::all() as $channel)
-                                        <li><a href="{{ route('threads.index', $channel->slug) }}">{{ $channel->name }}</a></li>
+                                    @foreach($channels as $channel)
+                                    <li><a href="{{ route('threads.index', $channel->slug) }}">{{ $channel->name }}</a></li>
                                     @endforeach
                                 </ul>
                             </li>
-                            
+
                             <li><a href="{{ route('threads.create') }}">Nouveau sujet</a></li>
 
                         </ul>
@@ -67,7 +77,7 @@
                                     <li>
                                         <a href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
+                                                   document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
 
