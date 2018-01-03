@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
  */
 abstract class Filters {
 
-    protected $request, $builder;
+    protected $request;
+    protected $builder;
     protected $filters = [];
 
     /**
@@ -27,9 +28,9 @@ abstract class Filters {
 
         $this->builder = $builder;
 
-        foreach ($this->getFilters() as $filter) {
+        foreach ($this->getFilters() as $filter => $value) {
             if (method_exists($this, $filter)) {
-                $this->$filter($this->request->$filter);
+                $this->$filter($value);
             }
         }
 

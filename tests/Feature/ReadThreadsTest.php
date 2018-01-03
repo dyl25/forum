@@ -53,9 +53,8 @@ class ReadThreadsTest extends TestCase {
         $threadInChannel = factory('App\Thread')->create(['channel_id' => $channel->id]);
         $threadNotInChannel = factory('App\Thread')->create();
 
-        //dd($channel->slug);
         $string = '/threads/' . $channel->slug;
-        //dd($string);
+
         $this->get($string)
                 ->assertSee($threadInChannel->title)
                 ->assertDontSee($threadNotInChannel->title);
@@ -73,6 +72,27 @@ class ReadThreadsTest extends TestCase {
         $this->get('threads?by=UserTest')
                 ->assertSee($threadByUserTest->title)
                 ->assertDontSee($threadNotByUserTest->title);
+    }
+    
+    /**
+     * @test
+     */
+    public function user_can_filter_threads_by_popularity() {
+        $threadTwoReplies = factory('App\Thread')->create();
+        factory('App\Reply', 2)->create(['thread_id' => $threadTwoReplies->id]);
+        
+        $threadThreeReplies = factory('App\Thread')->create();
+        factory('App\Reply', 3)->create(['thread_id' => $threadThreeReplies->id]);
+        
+        $threadNoReplies = $this->thread;
+        
+        $response = $this->getJson(route('threads.index', '?popular=1'))->json();
+    
+        /*
+         * les sujets doivent aller du plus populaire au moins 
+         * populaire selon leurs nombre de commentaires
+         */
+        $this->assertEquals([3,2,0], array_column($response, 'replies_count'));
     }
 
 }

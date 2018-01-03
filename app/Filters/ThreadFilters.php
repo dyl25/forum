@@ -11,7 +11,7 @@ use App\User;
  */
 class ThreadFilters extends Filters{
     
-    protected $filters = ['by'];
+    protected $filters = ['by', 'popular'];
 
     /**
      * Filtre la requête avec un username
@@ -23,6 +23,17 @@ class ThreadFilters extends Filters{
         $user = User::where('name', $username)->firstOrFail();
 
         return $this->builder->where('user_id', $user->id);
+    }
+    
+    /**
+     * Filtre la requête selon la popularité des sujets
+     * 
+     * @return $this
+     */
+    public function popular() {
+        $this->builder->getQuery()->orders = [];
+        
+        return $this->builder->orderBy('replies_count', 'desc');
     }
 
 }

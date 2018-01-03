@@ -10,10 +10,15 @@
                 <div class="panel-body">
                     @foreach($threads as $thread)
                     <article>
-                        <header>
-                            <h4>
-                                <a href="{{ route('threads.show', ['slug' => $thread->channel->slug ,'id' => $thread->id]) }}">{{ $thread->title }}</a>
+                        <header class="level">
+                            <h4 class="flex">
+                                <a href="{{ route('threads.show', ['slug' => $thread->channel->slug ,'id' => $thread->id]) }}">
+                                    {{ $thread->title }}
+                                </a>
                             </h4>
+                            <a href="{{ route('threads.show', ['slug' => $thread->channel->slug ,'id' => $thread->id]) }}">
+                                {{ $thread->replies_count }} {{str_plural('commentaire', $thread->replies_count)}}
+                            </a>
                         </header>
                         <div class="body">{{ $thread->body }}</div>
                     </article>

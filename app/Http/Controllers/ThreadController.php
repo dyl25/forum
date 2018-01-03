@@ -21,6 +21,10 @@ class ThreadController extends Controller {
     public function index(Channel $channel, ThreadFilters $filters) {
 
         $threads = $this->getThreads($channel, $filters);
+        
+        if(request()->wantsJson()) {
+            return $threads;
+        }
 
         return view('thread.index', compact('threads'));
     }
@@ -55,7 +59,6 @@ class ThreadController extends Controller {
                     'body' => request('body')
         ]);
 
-        //return redirect('/threads/'. $thread->channel->slug.'/' .$thread->id);
         return redirect(route('threads.show', [
             'slug' => $thread->channel->slug,
             'id' => $thread->id
@@ -107,7 +110,7 @@ class ThreadController extends Controller {
         //
     }
 
-    public function getThreads($channel, $filters) {
+    public function getThreads(Channel $channel, ThreadFilters $filters) {
         $threads = Thread::latest()->filter($filters);
 
         if ($channel->exists) {

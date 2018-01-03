@@ -12,6 +12,19 @@
 
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        
+        <style>
+            body {
+                padding-bottom: 100px;
+            }
+            .level {
+                display: flex;
+                align-items: center;
+            }
+            .flex {
+                flex: 1;
+            }
+        </style>
     </head>
     <body>
         <div id="app">
@@ -36,7 +49,6 @@
                     <div class="collapse navbar-collapse" id="app-navbar-collapse">
                         <!-- Left Side Of Navbar -->
                         <ul class="nav navbar-nav">
-                            <li><a href="{{ route('threads.index') }}">Tout les sujets</a></li>
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Afficher <span class="caret"></span></a>
@@ -45,6 +57,7 @@
                                     @if(auth()->check())
                                     <li><a href="{{route('threads.index',  '?by='.auth()->user()->name)}}">Mes sujets</a></li>
                                     @endif
+                                    <li><a href="{{route('threads.index',  '?popular=1')}}">Populaire</a></li>
                                 </ul>
                             </li>
 
