@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Reply;
-use App\Favorite;
 
 class FavoriteController extends Controller {
 
@@ -13,7 +12,9 @@ class FavoriteController extends Controller {
     }
 
     public function store(Reply $reply) {
-        return $reply->favorite();
+        $reply->favorite();
+
+        return back();
     }
 
 }
