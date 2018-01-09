@@ -26,4 +26,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    /**
+     * Permet de changer le nom de la clé par défaut pour faire une recherche
+     * 
+     * @return string Le nom de la clé
+     */
+    public function getRouteKeyName() {
+       return 'name'; 
+    }
+    
+    public function threads() {
+        return $this->hasMany(Thread::class)->latest();
+    }
 }

@@ -6,8 +6,21 @@
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a href="#">{{ $thread->creator->name }}</a> a posté:
-                    {{ $thread->title }}
+                    <div class="level">
+                        <span class="flex">
+                            <a href="{{ route('profiles.show', [$thread->creator]) }}">{{ $thread->creator->name }}</a> a posté:
+                            {{ $thread->title }}
+                        </span>
+                        @can('update', $thread)
+                        <form action="{{ 
+                            route('threads.delete', [$thread->channel->slug, $thread->id]) 
+                              }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button type="submit" class="btn btn-link">Supprimer le sujet</button>
+                        </form>
+                        @endcan
+                    </div>
                 </div>
 
                 <div class="panel-body">
@@ -17,9 +30,9 @@
                 </div>
             </div>
             @foreach($replies as $reply)
-                @include('thread.reply')
+            @include('thread.reply')
             @endforeach
-            
+
             {{ $replies->links() }}
 
             @if (auth()->check())

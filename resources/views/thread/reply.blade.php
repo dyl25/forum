@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="level">
             <h5 class="flex">
-                <a href="#">{{ $reply->owner->name }}</a>
+                <a href="{{ route('profiles.show', [$reply->owner]) }}">{{ $reply->owner->name }}</a>
             il y a {{ $reply->created_at->diffForHumans() }}
             </h5>
 

@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Channel extends Model
 {
     /**
-     * Change le nom de la clé pour récupérer le model par son slug et non plus
-     * par son id
-     * @return string Le nom de la clé
+     * Permet de changer le nom de la clé par défaut pour faire une recherche
      * 
+     * @return string Le nom de la clé
      */
     public function getRouteKeyName() {
        return 'slug'; 
