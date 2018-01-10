@@ -1,3 +1,11 @@
+## Projet forum
+
+Forum sur lequel différent sujet peuvent être créé et auquel les utilisateurs peuvent y répondre.
+    * Un visiteur peut utiliser les différent tris pour ordonner les sujets
+    * Un utilisateur peut poster un sujet
+    * Un utilisateur peut répondre à un sujet
+    * Un utilisateur peut supprimer son propre sujet mais pas celui d'un autre
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
